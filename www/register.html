@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="templates/css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image" href="templates/images/logo_fav.jpg" />
+    <title>Regs.tr</title>
+</head>
+
+<body class="fundo">
+    <div class="container pt-4 border">
+        <div class="row">
+            <div class="col-4">
+                <img src="templates/images/back-icon-small.png" style="padding-left: 10px;"
+                    onclick="location.href='index.html';">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <img src="templates/images/logo.png" class="mx-auto d-block">
+            </div>
+        </div>
+        <div class="row justify-content-center pt-3">
+            <div class="col text-center">
+                <h3>R e g i s t r e - s e </h3>
+            </div>
+        </div>
+        <form class="formulario">
+            <div class="form-group row pt-3">
+                <label class="col-lg-2 col-form-label" for="primeiro-nome">Primeiro nome:</label>
+                <div class="col-lg-4">
+                    <input type="text" class="form-control" id="primeiro-nome" required autofocus>
+                </div>
+
+                <label class="col-lg-1 col-form-label" for="sobrenome" id="sobrenome-label">Sobrenome:</label>
+                <div class="col-lg-5">
+                    <input type="text" class="form-control" id="sobrenome" required>
+                </div>
+            </div>
+            <div class="form-group row pt-3">
+                <label class="col-md-2 col-form-label" for="data-nascimento">Data de nascimento:</label>
+                <div class="col-md-4">
+                    <input type="date" class="form-control" id="data-nascimento" onblur="testDate()" required>
+                    <small class="form-text" id="data-nascimento-error"></small>
+                </div>
+                <label class="col-md-1 col-form-label" for="celular">Celular:</label>
+                <div class="col-md-5">
+                    <input type="tel" class="form-control" id="cel-number" pattern="\(\d{2}\)\d{5}-\d{4}" data-mask="(##)#####-####"
+                        placeholder="(xx)00000-0000" onblur="testPhone()" required>
+                </div> 
+            </div>
+            <div class="form-group row pt-3">
+
+                <label class="col-md-1 col-form-label" for="emailregister">Email:</label>
+                <div class="col-md-5">
+                    <input type="email" class="form-control" id="emailregister" required>
+                    <small class="form-text text-muted">Este email será seu login e não pode ter sido previamente
+                        cadastrado.</small>
+                </div>
+
+                <fieldset class="form-group pt-3" style="margin-top: -20px;">
+                    <div class="row">
+                        <legend class="col col-form-label" style="padding-left: 30px;">Gênero:</legend>
+
+                        <div class="form-check-inline ">
+                            <input class="form-check-input" type="radio" name="genero-opcao" id="genero-masculino"
+                                required>
+                            <label class="form-check-label" for="genero-masculino">
+                                Masculino
+                            </label>
+                        </div>
+                        <div class="form-check-inline ">
+                            <input class="form-check-input" type="radio" name="genero-opcao" id="genero-feminino"
+                                required>
+                            <label class="form-check-label" for="genero-feminino">
+                                Feminino
+                            </label>
+                        </div>
+                        <div class="form-check-inline ">
+                            <input class="form-check-input" type="radio" name="genero-opcao" id="genero-outro" required>
+                            <label class="form-check-label" for="genero-outro">
+                                Outro
+                            </label>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-lg-1 col-form-label new-pwd-label" for="register-pwd">Nova senha: </label>
+                <div class="col-lg-5">
+                    <input class="form-control" type="password" id="register-pwd" pattern="\d{6,12}$" onblur="testNewPwd()" required>
+                    <small class="form-text text-muted">A senha deve ter entre 6 e 12 caracteres.</small>
+                    <small class="form-text" id="new-pwd-error"></small>
+                </div>
+                <label class="confirm-pwd-label col-lg-1 col-form-label pt-0 " for="confirm-pwd">Confirme a senha:
+                </label>
+                <div class="col-lg-5">
+                    <input class="form-control" type="password" id="confirm-pwd" onblur="confirmPwd()" required>
+                    <small class="form-text" id="confirm-pwd-error"></small>
+                </div>
+            </div>
+            <div class="col-md-6 offset-md-3 pt-3">
+                <button type="submit" class="btn btn-secondary btn-block" id="register-next">Prosseguir</button>
+            </div>
+        </form>
+
+    </div>
+
+
+
+    <script src="js/validacoes.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="lib/jquery-mask-plugin/jquery-mask-plugin/jquery.mask.min.js"></script>
+
+</body>
+
+</html>
