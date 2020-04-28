@@ -1,0 +1,28 @@
+.body-bg{
+    background-color: #303030;
+}
+
+.container-fluid{
+    max-width: 800px;
+    background-color: #eeeeee;
+    margin-top: 1vh;
+    padding-bottom: 2.5vh;
+}
+
+#new-pwd-error, #confirm-pwd-error, #data-nascimento-error{
+    color: red;
+}
+
+.form-control{
+  max-width: 430px;
+}
+
+#forgot-pwd{
+  text-align:center;
+}
+
+.btn-secondary{
+  min-width: 148px;
+  margin-left: 1px;
+  margin-right: 1px;
+}
