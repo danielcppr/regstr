@@ -1,8 +1,7 @@
 <% const datePattern = '^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|(([1][26]|[2468][048]|[3579][26])00))))$';
 %>
 <a href='login'>
-  <img src="assets/images/back-icon-small.png"
-    style="padding-left: 10px; height: 25px; position:absolute; z-index: 1;">
+  <img src="assets/images/back-icon-small.png" style="padding-left: 10px; height: 25px; position:absolute; z-index: 1;">
 </a>
 <div class="row justify-content-center">
   <div class="col">
@@ -14,31 +13,57 @@
   <div class="form-row">
     <div class="form-group col mb-0">
       <label for="primeiro-nome">Primeiro nome:</label>
-      <input type="text" class="form-control" name='primeironome' id="primeiro-nome" required autofocus>
+      <input type="text" class="form-control" name='primeironome' id="primeiro-nome"
+        value="<%= typeof primeironome != 'undefined' ? primeironome : '' %>" required autofocus>
     </div>
     <div class="form-group col mb-0 ">
       <label for="sobrenome" id="sobrenome-label">Sobrenome:</label>
-      <input type="text" class="form-control" name='sobrenome' id="sobrenome" required>
+      <input type="text" class="form-control" name='sobrenome' id="sobrenome"
+        value="<%= typeof sobrenome != 'undefined' ? sobrenome : '' %>" required>
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col pt-3 mb-0">
       <label for="emailregister">Email:</label>
-      <input type="email" class="form-control" name='emailregister' id="emailregister" required>
+      <input type="email" class="form-control" name='emailregister' id="emailregister"
+        value="<%= typeof emailregister != 'undefined' ? emailregister : '' %>" required>
       <small class="form-text text-muted">Este email será seu login e não pode ter sido previamente
         cadastrado.</small>
+      <small class="form-text error-msg" id="email-error">
+        <% if (typeof errors !== 'undefined')  { %>
+        <% errors.forEach(err => { %>
+        <%= err.err_email_msg %>
+        <% })
+                } %>
+      </small>
     </div>
     <div class="form-group col pt-3 mb-0">
       <label for="data-nascimento">Data de nascimento:</label>
-      <input type="date" class="form-control" name="datanascimento" pattern= <%= datePattern %> id="data-nascimento" required>
-      <small class="form-text" id="data-nascimento-error"></small>
+      <input type="date" class="form-control" name="datanascimento" pattern=<%= datePattern %> id="data-nascimento"
+        value="<%= typeof datanascimento != 'undefined' ? datanascimento : '' %>" required>
+      <small class="form-text error-msg" id="data-nascimento-error">
+        <% if (typeof errors !== 'undefined')  { %>
+        <% errors.forEach(err => { %>
+        <%= err.datemsg %>
+        <% })
+        } %>
+      </small>
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col pt-3 mb-0">
       <label for="celular">Celular:</label>
       <input type="tel" class="form-control" name='celnumber' id="cel-number" pattern="\(\d{2}\)\d{5}-\d{4}"
-        placeholder="(xx)00000-0000" onblur="testPhone()" required>
+        placeholder="(xx)00000-0000" onblur="testPhone()"
+        value="<%= typeof celnumber != 'undefined' ? celnumber : '' %>" required>
+        <small class="form-text text-muted">No formato (xx)xxxxx-xxxx</small>
+      <small class="form-text error-msg" id="cel-number-error">
+        <% if (typeof errors !== 'undefined')  { %>
+        <% errors.forEach(err => { %>
+        <%= err.err_phone_msg %>
+        <% })
+          } %>
+      </small>
     </div>
     <div class="form-group col pt-3 mb-0">
       <div class="row" style="padding-left: 17px;">
@@ -46,15 +71,28 @@
       </div>
       <div class="row" style="padding-left: 17px; padding-top: 6px">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="genreOption" id="gen-masculino" value="m" required>
+          <input class="form-check-input " type="radio" name="genreOption" id="gen-masculino" value="M" required 
+          <% if (typeof genreOption !== 'undefined') {
+            if (genreOption == 'M') { %> 
+              checked <% }
+          }%>> 
           <label class="form-check-label" for="gen-masculino">Masculino</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="genreOption" id="gen-femininio" value="f" required>
+          <input class="form-check-input" type="radio" name="genreOption" id="gen-femininio" value="F" required
+          <% if (typeof genreOption !== 'undefined') {
+            if (genreOption == 'F') { %> 
+              checked <% }
+          }%> >
           <label class="form-check-label" for="gen-femininio">Feminino</label>
         </div>
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="genreOption" id="gen-outro" value="o" required>
+          <input class="form-check-input" type="radio" name="genreOption" id="gen-outro" value="O" required
+          <% if (typeof genreOption !== 'undefined') {
+            if (genreOption == 'O') { %> 
+              checked <% }
+          }%>
+          >
           <label class="form-check-label" for="gen-outro">Outro</label>
         </div>
       </div>
@@ -63,14 +101,22 @@
   <div class="form-row">
     <div class="form-group col pt-3 mb-0">
       <label for="register-pwd">Nova senha: </label>
-      <input class="form-control" type="password" name='registerpwd' id="register-pwd" pattern="\d{6,12}$" required>
-      <small class="form-text text-muted">A senha deve ter entre 6 e 12 caracteres.</small>
+      <input class="form-control" type="password" name='registerpwd' id="register-pwd" pattern="[a-zA-Z0-9]{6,12}$"
+        value="<%= typeof registerpwd != 'undefined' ? registerpwd : '' %>" required>
+      <small class="form-text text-muted">A senha deve ter entre 6 e 12 números e/ou letras.</small>
       <small class="form-text" id="new-pwd-error"></small>
     </div>
     <div class="form-group col pt-3 mb-0">
       <label for="confirm-pwd">Confirme a senha:</label>
-      <input class="form-control" type="password" name='confirmpwd' id="confirm-pwd" required>
-      <small class="form-text" id="confirm-pwd-error"></small>
+      <input class="form-control" type="password" name='confirmpwd' id="confirm-pwd"
+        value="<%= typeof confirmpwd != 'undefined' ? confirmpwd : '' %>" required>
+      <small class="form-text error-msg" id="confirm-pwd-error">
+        <% if (typeof errors !== 'undefined')  { %>
+        <% errors.forEach(err => { %>
+        <%= err.pwdmatch %>
+        <% })
+        } %>
+      </small>
     </div>
   </div>
   <button type="submit" class="btn btn-secondary btn-block mt-2" value="submit">Prosseguir</button>

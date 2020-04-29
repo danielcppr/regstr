@@ -9,8 +9,10 @@
     padding-bottom: 2.5vh;
 }
 
-#new-pwd-error, #confirm-pwd-error, #data-nascimento-error{
+.error-msg {
     color: red;
+    font-size: 15px;
+    margin-left: 5px;
 }
 
 .form-control{
