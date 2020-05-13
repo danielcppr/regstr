@@ -13,76 +13,67 @@ router.get('/register', (req, res) => {
   res.render('register', { title: 'Registre-se' })
 })
 
-router.post('/register', (req, res) => {
-  /* 
-  ISSUE: COMO POSSO MODULAR A PARTE DE VALIDAÇÃO? 
-  */
+router.post('/register', async (req, res) => {
 
-  const primeironome = req.body.primeironome
-  const sobrenome = req.body.sobrenome
-  const name = primeironome + sobrenome
-  const { emailregister, registerpwd, confirmpwd, celnumber, genreOption, datanascimento } = req.body
+  var primeironome = req.body.primeironome
+  var sobrenome = req.body.sobrenome
+  var name = `${primeironome} ${sobrenome}`
+  var { emailregister, registerpwd, confirmpwd, celnumber, genreOption, datanascimento } = req.body
 
-  let errors = []
+  var errors = []
 
-  // VALIDADO NO FORM 
-  // if (celnumber.match(/\(\d{2}\)\d{5}-\d{4}/g) === null) {
-  //   errors.push({ msg: 'formato inválido' })
-  // }
-
+  //VALIDAÇÃO
   if (registerpwd !== confirmpwd) {
     errors.push({ pwdmatch: 'A senha não confere' })
   }
 
-  let birthDate = new Date(datanascimento)
+  var birthDate = new Date(datanascimento)
   if (birthDate.getFullYear().length > 4 || birthDate.getFullYear() < 1920 || birthDate.getFullYear() > 2020) {
     errors.push({ datemsg: 'Data inválida' })
   }
 
+
   const db = require('../config/mysqlConn')
 
-  /*
-  ISSUE: errors.push not working inside query callback
-  Arrumar essa gambiarra abaixo -> ASYNC? TRATAR ERRO DO SQL ?
-  */
 
-  var emailalreadyregistered = db.query('SELECT * FROM Users WHERE email = ?', [emailregister], (err, result) => {
-    if (result.length > 0) {
-      return true
+  try {
+    var userResult = await db.promise().query('SELECT * FROM Users WHERE email = ?', [emailregister])
+    if (userResult[0].length) {
+      errors.push({ err_email_msg: 'Email já cadastrado' })
     }
-  })
-  emailalreadyregistered ? errors.push({ err_email_msg: 'Email já cadastrado' }) : ''
 
-  var phonealreadyregistered = db.query('SELECT * FROM Users WHERE celnumber = ?', [celnumber], (err, result) => {
-    if (result.length > 0) {
-      return true
+
+    var pwdResult = await db.promise().query('SELECT * FROM Users WHERE celnumber = ?', [celnumber])
+    if (pwdResult[0].length) {
+      errors.push({ err_phone_msg: 'Número já cadastrado' })
     }
-  })
-  phonealreadyregistered ? errors.push({ err_phone_msg: 'Número já cadastrado' }) : ''
 
+    //     console.log(errors)
 
-  if (errors.length == 0) {
-    db.query('INSERT INTO Users (`user_id`, `name`, `email`, `password`, `celnumber`, `genre`, `birthdate`) VALUES (null, ?, ?, ?, ?, ?, ?)',
-      [name, emailregister, registerpwd, celnumber, genreOption, datanascimento], (err, rows, fields) => {
-        if (err)
-          res.send(err)
-        else
-          res.send('Register OK!')
+    if (errors.length == 0) {
+      var insertQuery = await db.promise().query('INSERT INTO Users (`user_id`, `name`, `email`, `password`, `celnumber`, `genre`, `birthdate`) VALUES (null, ?, ?, ?, ?, ?, ?)',
+        [name, emailregister, registerpwd, celnumber, genreOption, datanascimento])
+      if (insertQuery)
+        res.send('Register OK!')
+
+    } else {
+      res.render('register', {
+        errors,
+        primeironome,
+        sobrenome,
+        emailregister,
+        celnumber,
+        genreOption,
+        datanascimento,
+        title: 'Registre-se'
       })
-  } else {
-    res.render('register', {
-      errors,
-      primeironome,
-      sobrenome,
-      emailregister,
-      registerpwd,
-      confirmpwd,
-      celnumber,
-      genreOption,
-      datanascimento,
-      title: 'Registre-se'
-    })
+    }
+
+  } catch (error) {
+    res.send(error)
+    console.error(error)
   }
+
 })
 
 module.exports = router
