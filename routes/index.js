@@ -1,5 +1,5 @@
 const router = require('express').Router();
-
+const bcrypt = require('bcryptjs');
 
 router.get('/', (req, res) => {
   res.redirect('/login')
@@ -51,8 +51,9 @@ router.post('/register', async (req, res) => {
     //     console.log(errors)
 
     if (errors.length == 0) {
+      var hashpwd = bcrypt.hashSync(registerpwd, 10);
       var insertQuery = await db.promise().query('INSERT INTO Users (`user_id`, `name`, `email`, `password`, `celnumber`, `genre`, `birthdate`) VALUES (null, ?, ?, ?, ?, ?, ?)',
-        [name, emailregister, registerpwd, celnumber, genreOption, datanascimento])
+        [name, emailregister, hashpwd, celnumber, genreOption, datanascimento])
       if (insertQuery)
         res.send('Register OK!')
 
