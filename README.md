@@ -1,4 +1,4 @@
-# regstr
-simple user register application using bootstrap - written for studying purpose
+## regstr
+Aplicação simples de cadastro de usuários utilizando nodejs, express e mysql.
 
 not finished
